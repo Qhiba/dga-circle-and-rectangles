@@ -19,12 +19,34 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private GameObject playerPrefab = null;
-    
+
+    public PlayerController PController { get; private set; }
+
+
     public void InstantiatePlayer()
     {
         if (FindObjectOfType<PlayerController>() == null)
         {
-            GameObject newPlayer = Instantiate(playerPrefab);
+            GameObject newPlayer = Instantiate(playerPrefab, Vector2.zero, Quaternion.identity);
+            PController = newPlayer.GetComponent<PlayerController>();
+            PController.ResetAllConfiguration();
+            Debug.Log("Player Instantiated");
         }
+        else
+        {
+            PController.ResetAllConfiguration();
+        }
+    }
+
+    public void AddForceToPlayer()
+    {
+        if (FindObjectOfType<PlayerController>() == null)
+        {
+            InstantiatePlayer();
+        }
+
+        PController.ResetAllConfiguration();
+        PController.GiveInitialForce();
+        Debug.Log("Force Added");
     }
 }
