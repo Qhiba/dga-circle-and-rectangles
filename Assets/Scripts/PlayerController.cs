@@ -89,6 +89,17 @@ public class PlayerController : MonoBehaviour
         rb2d.MovePosition(transform.position + (Vector3)movement);
     }
 
+    public void MoveToPoint(Vector2 pointerPos)
+    {
+        if (isMouseControlled)
+        {
+            Vector2 direction = (Vector3)pointerPos - transform.position;
+
+            rb2d.velocity = Vector2.zero;
+            rb2d.AddForce(direction.normalized * force);
+        }
+    }
+
     public void ResetAllConfiguration()
     {
         transform.position = Vector2.zero;

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Other References")]
     [SerializeField] private Transform wallParent = null;
+    [SerializeField] private GameObject tapArea = null;
 
     public PlayerController PController { get; private set; }
 
@@ -36,8 +37,6 @@ public class GameManager : MonoBehaviour
             GameObject newPlayer = Instantiate(playerPrefab, Vector2.zero, Quaternion.identity);
             PController = newPlayer.GetComponent<PlayerController>();
             PController.ResetAllConfiguration();
-
-            Debug.Log("Player Instantiated");
         }
         else
         {
@@ -59,8 +58,6 @@ public class GameManager : MonoBehaviour
 
         PlayerOutOfScreen();
         PController.GiveInitialForce();
-
-        Debug.Log("Force Added");
     }
 
     public void PlayerMoveUsingKeyboard()
@@ -73,6 +70,33 @@ public class GameManager : MonoBehaviour
         PController.ResetAllConfiguration();
         PController.SetToControllByKeyboard();
     }
+
+    #region Mouse Input
+    public void PlayerMoveUsingMouse()
+    {
+        if (FindObjectOfType<PlayerController>() == null)
+        {
+            InstantiatePlayer();
+        }
+        if (!tapArea.activeSelf)
+        {
+            tapArea.SetActive(true);
+        }
+
+        PController.ResetAllConfiguration();
+        PController.SetToControllByMouse();
+    }
+
+    public void MoveToPoint(Vector3 point)
+    {
+        PController.MoveToPoint(point);
+    }
+
+    public void DeactiveTapArea()
+    {
+        tapArea.SetActive(false);
+    }
+    #endregion
 
     #region Wall Configuration
     public void InstantiateWall()
@@ -93,8 +117,6 @@ public class GameManager : MonoBehaviour
                     newWall.SetTransform();                    
                 }
             }
-
-            Debug.Log("Walls Instantiated");
         }
         else
         {
@@ -102,8 +124,6 @@ public class GameManager : MonoBehaviour
             {
                 wall.gameObject.SetActive(true);
             }
-
-            Debug.Log("Walls Actived");
         }
     }
 

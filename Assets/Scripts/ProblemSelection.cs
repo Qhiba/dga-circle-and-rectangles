@@ -9,7 +9,7 @@ public class ProblemSelection : MonoBehaviour
         switch (problem)
         {
             case 1:
-                GameManager.Instance.DeactivateWall();
+                SetOtherGameEnvironment();
                 GameManager.Instance.InstantiatePlayer();
                 UIController.Instance.SetProblemText("Instantiate circle to the center of the screen.");
 
@@ -17,21 +17,24 @@ public class ProblemSelection : MonoBehaviour
                 UIController.Instance.SetInformationText(playerPos);
                 break;
             case 2:
-                GameManager.Instance.DeactivateWall();
+                SetOtherGameEnvironment();
                 GameManager.Instance.AddForceToPlayer(true);
                 UIController.Instance.SetProblemText("Give constant speed to the circle.");                
                 break;
             case 3:
-                GameManager.Instance.InstantiateWall();
+                SetOtherGameEnvironment(true);
                 GameManager.Instance.AddForceToPlayer();
                 UIController.Instance.SetProblemText("Give circle bounciness and create a walls.");
                 break;
             case 4:
-                GameManager.Instance.InstantiateWall();
+                SetOtherGameEnvironment(true);
                 GameManager.Instance.PlayerMoveUsingKeyboard();
                 UIController.Instance.SetProblemText("Move circle using keyboard input");
                 break;
             case 5:
+                SetOtherGameEnvironment(true, true);
+                GameManager.Instance.PlayerMoveUsingMouse();
+                UIController.Instance.SetProblemText("Move circle to mouse clicked position (Click anywhere inside the border).");
                 break;
             case 6:
                 break;
@@ -41,6 +44,28 @@ public class ProblemSelection : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    //All game environment such as Walls, TapArea, RectanglePoint, Score UI, and other thing except Player/Circle
+    private void SetOtherGameEnvironment(bool isWallActive = false, bool isTapAreaActive = false)
+    {
+        if (isWallActive)
+        {
+            GameManager.Instance.InstantiateWall();
+        }
+        else
+        {
+            GameManager.Instance.DeactivateWall();
+        }
+
+        if (isTapAreaActive)
+        {
+            return;
+        }
+        else
+        {
+            GameManager.Instance.DeactiveTapArea();
         }
     }
 }
