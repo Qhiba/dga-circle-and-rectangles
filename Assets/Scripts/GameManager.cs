@@ -181,6 +181,7 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < maxRectangle; i++)
             {
                 activeRectangle[i].transform.position = SetRandomRectanglePosition();
+                activeRectangle[i].SetDestructable(false);
                 activeRectangle[i].gameObject.SetActive(true);
             }
         }
@@ -219,7 +220,14 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < activeRectangle.Count; i++)
         {
             activeRectangle[i].gameObject.SetActive(false);
-            Debug.Log("TES");
+        }
+    }
+
+    public void SetRectangleToDestrucable(bool isDestructable)
+    {
+        for (int i = 0; i < activeRectangle.Count; i++)
+        {
+            activeRectangle[i].SetDestructable(isDestructable);
         }
     }
     #endregion

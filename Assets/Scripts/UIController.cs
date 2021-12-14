@@ -21,6 +21,9 @@ public class UIController : MonoBehaviour
 
     [SerializeField] private Text problemText = null;
     [SerializeField] private Text informationText = null;
+    [SerializeField] private Text scoreText = null;
+
+    private int score;
 
     private void Start()
     {
@@ -36,4 +39,24 @@ public class UIController : MonoBehaviour
     {
         informationText.text = sentence;
     }
+
+    #region Score Configuration
+    public void ActivateScoreText(bool isActive)
+    {
+        ResetScore();
+        scoreText.gameObject.SetActive(isActive);
+    }
+
+    public void IncrementScore()
+    {
+        score++;
+        scoreText.text = $"Your Score: {score.ToString()}";
+    }
+
+    public void ResetScore()
+    {
+        score = 0;
+        scoreText.text = $"Your Score: {score.ToString()}";
+    }
+    #endregion
 }

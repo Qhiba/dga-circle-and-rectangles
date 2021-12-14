@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Rectangle : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool IsDestructable { get; private set; }
+
+    public void SetDestructable(bool isDestructable)
     {
-        
+        IsDestructable = isDestructable;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.transform.tag == "Player" && IsDestructable)
+        {
+            UIController.Instance.IncrementScore();
+            gameObject.SetActive(false);
+        }
     }
 }
