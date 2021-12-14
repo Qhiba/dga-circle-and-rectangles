@@ -32,11 +32,14 @@ public class ProblemSelection : MonoBehaviour
                 UIController.Instance.SetProblemText("Move circle using keyboard input");
                 break;
             case 5:
-                SetOtherGameEnvironment(true, true);
+                SetOtherGameEnvironment(true, true, false);
                 GameManager.Instance.PlayerMoveUsingMouse();
                 UIController.Instance.SetProblemText("Move circle to mouse clicked position (Click anywhere inside the border).");
                 break;
             case 6:
+                SetOtherGameEnvironment(true, false, true);
+                GameManager.Instance.PlayerMoveUsingKeyboard();
+                UIController.Instance.SetProblemText("Add Rectangle at random total and position (move circle with arrow key).");
                 break;
             case 7:
                 break;
@@ -48,7 +51,7 @@ public class ProblemSelection : MonoBehaviour
     }
 
     //All game environment such as Walls, TapArea, RectanglePoint, Score UI, and other thing except Player/Circle
-    private void SetOtherGameEnvironment(bool isWallActive = false, bool isTapAreaActive = false)
+    private void SetOtherGameEnvironment(bool isWallActive = false, bool isTapAreaActive = false, bool isRectangleActive = false)
     {
         if (isWallActive)
         {
@@ -59,13 +62,18 @@ public class ProblemSelection : MonoBehaviour
             GameManager.Instance.DeactivateWall();
         }
 
-        if (isTapAreaActive)
+        if (!isTapAreaActive)
         {
-            return;
+            GameManager.Instance.DeactiveTapArea();
+        }
+
+        if (isRectangleActive)
+        {
+            GameManager.Instance.InstantiateRectangle();
         }
         else
         {
-            GameManager.Instance.DeactiveTapArea();
+            GameManager.Instance.DeactiveAllRectangle();
         }
     }
 }

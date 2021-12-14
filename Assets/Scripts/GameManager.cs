@@ -21,14 +21,22 @@ public class GameManager : MonoBehaviour
     [Header("Required Prefabs")]
     [SerializeField] private GameObject playerPrefab = null;
     [SerializeField] private GameObject wallPrefab = null;
+    [SerializeField] private GameObject rectanglePrefab = null;
 
     [Header("Other References")]
     [SerializeField] private Transform wallParent = null;
     [SerializeField] private GameObject tapArea = null;
+    [SerializeField] private Transform rectangleParent = null;
+
+    [Header("Point Setting")]
+    [SerializeField] private int maxRectangleOnScreen = 0;
 
     public PlayerController PController { get; private set; }
 
     private List<Wall> activeWall = new List<Wall>();
+    private List<Rectangle> activeRectangle = new List<Rectangle>();
+
+    private int maxRectangle = 0;
 
     public void InstantiatePlayer()
     {
@@ -140,6 +148,79 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("Walls Deactived");
+    }
+    #endregion
+
+    #region Rectangle/Point Configuration
+    public void InstantiateRectangle()
+    {
+        if (FindObjectOfType<PlayerController>() == null)
+        {
+            InstantiatePlayer();
+        }
+
+        maxRectangle = Random.Range(1, maxRectangleOnScreen);
+
+        if (activeRectangle.Count == 0 || activeRectangle.Count < maxRectangle)
+        {
+            for (int i = 0; i < Mathf.Abs(maxRectangle - activeRectangle.Count); i++)
+            {
+                GameObject newRectangleObj = Instantiate(rectanglePrefab, rectangleParent);
+                Rectangle newRectangle = newRectangleObj.GetComponent<Rectangle>();
+                activeRectangle.Add(newRectangle);
+            }
+
+            for (int i = 0; i < activeRectangle.Count; i++)
+            {
+                activeRectangle[i].transform.position = SetRandomRectanglePosition();
+            }
+        }
+        else
+        {
+            DeactiveAllRectangle();
+            for (int i = 0; i < maxRectangle; i++)
+            {
+                activeRectangle[i].transform.position = SetRandomRectanglePosition();
+                activeRectangle[i].gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private Vector2 SetRandomRectanglePosition()
+    {
+        Vector2 rectangleSize = rectanglePrefab.GetComponent<SpriteRenderer>().size / 0.5f;
+        
+        Vector2 maxPos = Camera.main.ViewportToWorldPoint(new Vector2(0.9f, 0.8f));
+        Vector2 minPos = Camera.main.ViewportToWorldPoint(new Vector2(0.1f, 0.2f));
+
+        float randomXPos = Random.Range(minPos.x, maxPos.x);
+        float randomYPos = Random.Range(minPos.y, maxPos.y);
+
+        Vector2 randomPos = new Vector2(randomXPos, randomYPos);
+
+        while (activeRectangle.Find(r => r.transform.position == (Vector3)randomPos))
+        {
+            randomXPos = Random.Range(minPos.x, maxPos.x);
+            randomYPos = Random.Range(minPos.y, maxPos.y);
+
+            randomPos = new Vector2(randomXPos, randomYPos);
+        }
+
+        return randomPos;
+    }
+
+    public void DeactiveAllRectangle()
+    {
+        if (activeRectangle.Count == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < activeRectangle.Count; i++)
+        {
+            activeRectangle[i].gameObject.SetActive(false);
+            Debug.Log("TES");
+        }
     }
     #endregion
 
