@@ -15,7 +15,10 @@ public class Rectangle : MonoBehaviour
     {
         if (collision.transform.tag == "Player" && IsDestructable)
         {
+            Rectangle rectangle = GetComponent<Rectangle>();
+
             UIController.Instance.IncrementScore();
+            GameManager.Instance.AddToRectangleWaitingList(rectangle);
             gameObject.SetActive(false);
         }
     }

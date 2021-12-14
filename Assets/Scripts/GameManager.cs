@@ -28,14 +28,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject tapArea = null;
     [SerializeField] private Transform rectangleParent = null;
 
-    [Header("Point Setting")]
+    [Header("Rectangle Setting")]
     [SerializeField] private int maxRectangleOnScreen = 0;
+    [SerializeField] private float respawnTime = 3;
+
 
     public PlayerController PController { get; private set; }
 
     private List<Wall> activeWall = new List<Wall>();
     private List<Rectangle> activeRectangle = new List<Rectangle>();
+    private Queue<Rectangle> waitingRectangle = new Queue<Rectangle>();
 
+    private bool isRectangleRespawnable = false;
     private int maxRectangle = 0;
 
     public void InstantiatePlayer()
@@ -199,7 +203,7 @@ public class GameManager : MonoBehaviour
 
         Vector2 randomPos = new Vector2(randomXPos, randomYPos);
 
-        while (activeRectangle.Find(r => r.transform.position == (Vector3)randomPos))
+        while (activeRectangle.Find(r => r.transform.position == (Vector3)randomPos) && RectIsNotInsidePlayer(randomPos))
         {
             randomXPos = Random.Range(minPos.x, maxPos.x);
             randomYPos = Random.Range(minPos.y, maxPos.y);
@@ -210,6 +214,16 @@ public class GameManager : MonoBehaviour
         return randomPos;
     }
 
+    private bool RectIsNotInsidePlayer(Vector2 randomPos)
+    {
+        Vector2 playerSize = PController.gameObject.GetComponent<SpriteRenderer>().size / 0.5f;
+        Vector2 playerPos = PController.transform.position;
+        Vector2 minPlayerArea = new Vector2(playerPos.x - playerSize.x, playerPos.y - playerSize.y);
+        Vector2 maxPlayerArea = new Vector2(playerPos.x + playerSize.x, playerPos.y + playerSize.y);
+
+        return (randomPos.x > maxPlayerArea.x || randomPos.x < minPlayerArea.x || randomPos.y > maxPlayerArea.y || randomPos.y < minPlayerArea.y);
+    }
+
     public void DeactiveAllRectangle()
     {
         if (activeRectangle.Count == 0)
@@ -217,9 +231,18 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        isRectangleRespawnable = false;
         for (int i = 0; i < activeRectangle.Count; i++)
         {
             activeRectangle[i].gameObject.SetActive(false);
+        }
+
+        if (waitingRectangle.Count >= 0)
+        {
+            for (int i = 0; i < waitingRectangle.Count; i++)
+            {
+                waitingRectangle.Dequeue();
+            }
         }
     }
 
@@ -229,6 +252,40 @@ public class GameManager : MonoBehaviour
         {
             activeRectangle[i].SetDestructable(isDestructable);
         }
+    }
+
+    public void AddToRectangleWaitingList(Rectangle rectangle)
+    {
+        if (isRectangleRespawnable)
+        {
+            waitingRectangle.Enqueue(rectangle);
+        }
+    }
+
+    private void RespawnRectangle()
+    {
+        if (waitingRectangle.Count == 0)
+        {
+            return;
+        }
+
+        Rectangle rectangle = waitingRectangle.Dequeue();
+        rectangle.transform.position = SetRandomRectanglePosition();
+        rectangle.GetComponent<Rectangle>().SetDestructable(true);
+        rectangle.gameObject.SetActive(true);
+    }
+
+    private IEnumerator SpawnObject()
+    {
+        RespawnRectangle();
+        yield return new WaitForSeconds(respawnTime);
+        StartCoroutine(SpawnObject());
+    }
+
+    public void SetRectangleRespawnable(bool isRespawnable)
+    {
+        isRectangleRespawnable = isRespawnable;
+        StartCoroutine(SpawnObject());
     }
     #endregion
 

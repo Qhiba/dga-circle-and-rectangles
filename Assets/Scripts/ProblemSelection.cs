@@ -49,6 +49,12 @@ public class ProblemSelection : MonoBehaviour
                 UIController.Instance.SetProblemText("Add score for every rectangle Player get.");
                 break;
             case 8:
+                SetOtherGameEnvironment(true, false, true, true);
+                UIController.Instance.ResetScore();
+                GameManager.Instance.SetRectangleToDestrucable(true);
+                GameManager.Instance.SetRectangleRespawnable(true);
+                GameManager.Instance.PlayerMoveUsingKeyboard();
+                UIController.Instance.SetProblemText("Make Rectangle respawn after 3 seconds.");
                 break;
             default:
                 break;
