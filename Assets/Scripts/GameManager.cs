@@ -63,6 +63,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("Force Added");
     }
 
+    public void PlayerMoveUsingKeyboard()
+    {
+        if (FindObjectOfType<PlayerController>() == null)
+        {
+            InstantiatePlayer();
+        }
+
+        PController.ResetAllConfiguration();
+        PController.SetToControllByKeyboard();
+    }
+
     #region Wall Configuration
     public void InstantiateWall()
     {
@@ -121,7 +132,6 @@ public class GameManager : MonoBehaviour
 
         Vector2 screenToWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         Vector2 playerPos = PController.transform.position;
-        Debug.Log(screenToWorld);
 
         if (playerPos.x > screenToWorld.x || playerPos.x < -screenToWorld.x || playerPos.y > screenToWorld.y || playerPos.y < -screenToWorld.y)
         {

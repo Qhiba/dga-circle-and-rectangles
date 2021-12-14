@@ -27,6 +27,9 @@ public class ProblemSelection : MonoBehaviour
                 UIController.Instance.SetProblemText("Give circle bounciness and create a walls.");
                 break;
             case 4:
+                GameManager.Instance.InstantiateWall();
+                GameManager.Instance.PlayerMoveUsingKeyboard();
+                UIController.Instance.SetProblemText("Move circle using keyboard input");
                 break;
             case 5:
                 break;
