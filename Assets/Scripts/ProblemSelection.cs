@@ -9,6 +9,7 @@ public class ProblemSelection : MonoBehaviour
         switch (problem)
         {
             case 1:
+                GameManager.Instance.DeactivateWall();
                 GameManager.Instance.InstantiatePlayer();
                 UIController.Instance.SetProblemText("Instantiate circle to the center of the screen.");
 
@@ -16,8 +17,24 @@ public class ProblemSelection : MonoBehaviour
                 UIController.Instance.SetInformationText(playerPos);
                 break;
             case 2:
-                GameManager.Instance.AddForceToPlayer();
+                GameManager.Instance.DeactivateWall();
+                GameManager.Instance.AddForceToPlayer(true);
                 UIController.Instance.SetProblemText("Give constant speed to the circle.");                
+                break;
+            case 3:
+                GameManager.Instance.InstantiateWall();
+                GameManager.Instance.AddForceToPlayer();
+                UIController.Instance.SetProblemText("Give circle bounciness and create a walls.");
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
                 break;
             default:
                 break;

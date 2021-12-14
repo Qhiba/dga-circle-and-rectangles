@@ -19,8 +19,8 @@ public class UIController : MonoBehaviour
         }
     }
 
-    [SerializeField] private Text problemText;
-    [SerializeField] private Text informationText;
+    [SerializeField] private Text problemText = null;
+    [SerializeField] private Text informationText = null;
 
     private void Start()
     {

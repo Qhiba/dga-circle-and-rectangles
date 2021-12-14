@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb2d;
 
     private bool isConstantlyMoving = false;
-    private float force = 100;
+    private float force = 250;
 
     private void Awake()
     {
@@ -24,6 +24,11 @@ public class PlayerController : MonoBehaviour
 
     public void GiveInitialForce()
     {
+        if (rb2d.velocity.magnitude > 0)
+        {
+            return;
+        }
+
         int random = Random.Range(0, 10);
         float posX = random < 5 ? -1.0f : 1.0f; //Only straight left (-1) or left (1)
         float posY = Random.Range(-1.0f, 1.0f); //It's possible for player to move on straight line

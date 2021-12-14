@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4095642277926218285}
   - component: {fileID: 4095642277926218286}
   - component: {fileID: 4095642277926218287}
+  - component: {fileID: 1482423439460758431}
   - component: {fileID: 8875524254513585698}
   m_Layer: 0
   m_Name: Player
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4095642277926218288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -93,6 +94,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16b3b5db0403dd4aae33688d63c658c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &1482423439460758431
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4095642277926218288}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!50 &8875524254513585698
 Rigidbody2D:
   serializedVersion: 4
@@ -107,10 +124,10 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7a2bb9b28c951ef46bcac444c92819e7, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
