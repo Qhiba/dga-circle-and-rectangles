@@ -41,6 +41,21 @@ public class GameManager : MonoBehaviour
 
     private bool isRectangleRespawnable = false;
     private int maxRectangle = 0;
+    private float currRectangleRespawnTime = 0;
+
+    private void Update()
+    {
+        //Debug.Log(waitingRectangle.Count);
+
+        if (isRectangleRespawnable && waitingRectangle.Count != 0)
+        {
+            currRectangleRespawnTime -= Time.deltaTime;
+            if (currRectangleRespawnTime <= 0)
+            {
+                RespawnRectangle();
+            }
+        }
+    }
 
     public void InstantiatePlayer()
     {
@@ -158,6 +173,9 @@ public class GameManager : MonoBehaviour
     #region Rectangle/Point Configuration
     public void InstantiateRectangle()
     {
+        isRectangleRespawnable = false;
+        currRectangleRespawnTime = respawnTime;
+
         if (FindObjectOfType<PlayerController>() == null)
         {
             InstantiatePlayer();
@@ -231,19 +249,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        isRectangleRespawnable = false;
         for (int i = 0; i < activeRectangle.Count; i++)
         {
             activeRectangle[i].gameObject.SetActive(false);
         }
-
-        if (waitingRectangle.Count >= 0)
-        {
-            for (int i = 0; i < waitingRectangle.Count; i++)
-            {
-                waitingRectangle.Dequeue();
-            }
-        }
+        
+        waitingRectangle.Clear();
     }
 
     public void SetRectangleToDestrucable(bool isDestructable)
@@ -273,19 +284,18 @@ public class GameManager : MonoBehaviour
         rectangle.transform.position = SetRandomRectanglePosition();
         rectangle.GetComponent<Rectangle>().SetDestructable(true);
         rectangle.gameObject.SetActive(true);
-    }
 
-    private IEnumerator SpawnObject()
-    {
-        RespawnRectangle();
-        yield return new WaitForSeconds(respawnTime);
-        StartCoroutine(SpawnObject());
+        currRectangleRespawnTime = respawnTime;
     }
 
     public void SetRectangleRespawnable(bool isRespawnable)
     {
         isRectangleRespawnable = isRespawnable;
-        StartCoroutine(SpawnObject());
+    }
+
+    public float GetCurrentRespawnTime()
+    {
+        return currRectangleRespawnTime;
     }
     #endregion
 

@@ -22,12 +22,22 @@ public class UIController : MonoBehaviour
     [SerializeField] private Text problemText = null;
     [SerializeField] private Text informationText = null;
     [SerializeField] private Text scoreText = null;
+    [SerializeField] private Text respawnTimeText = null;
 
     private int score;
+    private bool isCountingTime;
 
     private void Start()
     {
         problemText.text = "Choose your Problems";
+    }
+
+    private void Update()
+    {
+        if (isCountingTime)
+        {
+            RectRespawnTime();
+        }
     }
 
     public void SetProblemText(string sentence)
@@ -59,4 +69,16 @@ public class UIController : MonoBehaviour
         scoreText.text = $"Your Score: {score.ToString()}";
     }
     #endregion
+
+    public void RectRespawnTime()
+    {
+        float time = GameManager.Instance.GetCurrentRespawnTime();
+        respawnTimeText.text = "Respawn Timer: " + time.ToString("0.00");
+    }
+
+    public void ActivateTimeText(bool isActive)
+    {
+        isCountingTime = isActive;
+        respawnTimeText.gameObject.SetActive(isActive);
+    }
 }

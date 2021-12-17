@@ -49,7 +49,7 @@ public class ProblemSelection : MonoBehaviour
                 UIController.Instance.SetProblemText("Add score for every rectangle Player get.");
                 break;
             case 8:
-                SetOtherGameEnvironment(true, false, true, true);
+                SetOtherGameEnvironment(true, false, true, true, true);
                 UIController.Instance.ResetScore();
                 GameManager.Instance.SetRectangleToDestrucable(true);
                 GameManager.Instance.SetRectangleRespawnable(true);
@@ -62,7 +62,7 @@ public class ProblemSelection : MonoBehaviour
     }
 
     //All game environment such as Walls, TapArea, RectanglePoint, Score UI, and other thing except Player/Circle
-    private void SetOtherGameEnvironment(bool isWallActive = false, bool isTapAreaActive = false, bool isRectangleActive = false, bool isScoreActive = false)
+    private void SetOtherGameEnvironment(bool isWallActive = false, bool isTapAreaActive = false, bool isRectangleActive = false, bool isScoreActive = false, bool isRespawnActive = false)
     {
         if (isWallActive)
         {
@@ -94,6 +94,15 @@ public class ProblemSelection : MonoBehaviour
         else
         {
             UIController.Instance.ActivateScoreText(isScoreActive);
+        }
+
+        if (isRespawnActive)
+        {
+            UIController.Instance.ActivateTimeText(isRespawnActive);
+        }
+        else
+        {
+            UIController.Instance.ActivateTimeText(isRespawnActive);
         }
     }
 }
