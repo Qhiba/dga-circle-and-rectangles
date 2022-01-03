@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameType
+{
+    MainGame,
+    ProblemSelection
+}
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance = null;
@@ -18,6 +24,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Header("Game Configuration")]
+    public GameType gameType;
+    public bool isPaused = false;
+
     [Header("Required Prefabs")]
     [SerializeField] private GameObject playerPrefab = null;
     [SerializeField] private GameObject wallPrefab = null;
@@ -32,7 +42,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int maxRectangleOnScreen = 0;
     [SerializeField] private float respawnTime = 3;
 
-
     public PlayerController PController { get; private set; }
 
     private List<Wall> activeWall = new List<Wall>();
@@ -42,6 +51,11 @@ public class GameManager : MonoBehaviour
     private bool isRectangleRespawnable = false;
     private int maxRectangle = 0;
     private float currRectangleRespawnTime = 0;
+
+    private void Awake()
+    {
+        SceneController.Instance.PauseGame(false);
+    }
 
     private void Update()
     {
@@ -313,5 +327,19 @@ public class GameManager : MonoBehaviour
         {
             PController.ResetAllConfiguration();
         }
+    }
+
+    public void DeleteAll()
+    {
+        DeactivateWall();
+        DeactiveAllRectangle();
+        DeactiveTapArea();        
+    }
+
+    public void GameOver()
+    {
+        SceneController.Instance.PauseGame(true);
+        UIController.Instance.ActiveGameOverPanel(true);
+        Debug.Log("You Dead!");
     }
 }

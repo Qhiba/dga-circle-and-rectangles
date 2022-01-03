@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class ProblemSelection : MonoBehaviour
 {
+    private void FixedUpdate()
+    {
+        if (GameManager.Instance.PController != null)
+        {
+            if (GameManager.Instance.PController.GetComponent<Rigidbody2D>().velocity.magnitude > 0)
+            {
+                UIController.Instance.SetInformationText("Circle Speed: " + GameManager.Instance.PController.GetComponent<Rigidbody2D>().velocity.magnitude.ToString());
+            }
+        }        
+    }
+
     public void SelectProblem(int problem)
     {
         switch (problem)
@@ -30,6 +41,7 @@ public class ProblemSelection : MonoBehaviour
                 SetOtherGameEnvironment(true);
                 GameManager.Instance.PlayerMoveUsingKeyboard();
                 UIController.Instance.SetProblemText("Move circle using keyboard input");
+                UIController.Instance.SetInformationText("Use Up, Down, Right, and Left Key to Move.");
                 break;
             case 5:
                 SetOtherGameEnvironment(true, true);
@@ -56,13 +68,18 @@ public class ProblemSelection : MonoBehaviour
                 GameManager.Instance.PlayerMoveUsingKeyboard();
                 UIController.Instance.SetProblemText("Make Rectangle respawn after 3 seconds.");
                 break;
+            case 9:
+                SetOtherGameEnvironment(false, false, false, false, false, true);
+                GameManager.Instance.DeleteAll();
+                UIController.Instance.SetProblemText("Go to Main Gameplay for Problem 9");
+                break;
             default:
                 break;
         }
     }
 
     //All game environment such as Walls, TapArea, RectanglePoint, Score UI, and other thing except Player/Circle
-    private void SetOtherGameEnvironment(bool isWallActive = false, bool isTapAreaActive = false, bool isRectangleActive = false, bool isScoreActive = false, bool isRespawnActive = false)
+    private void SetOtherGameEnvironment(bool isWallActive = false, bool isTapAreaActive = false, bool isRectangleActive = false, bool isScoreActive = false, bool isRespawnActive = false, bool isMenuShown = false)
     {
         if (isWallActive)
         {
@@ -86,23 +103,9 @@ public class ProblemSelection : MonoBehaviour
         {
             GameManager.Instance.DeactiveAllRectangle();
         }
-
-        if (isScoreActive)
-        {
-            UIController.Instance.ActivateScoreText(isScoreActive);
-        }
-        else
-        {
-            UIController.Instance.ActivateScoreText(isScoreActive);
-        }
-
-        if (isRespawnActive)
-        {
-            UIController.Instance.ActivateTimeText(isRespawnActive);
-        }
-        else
-        {
-            UIController.Instance.ActivateTimeText(isRespawnActive);
-        }
+        
+        UIController.Instance.ActivateScoreText(isScoreActive);
+        UIController.Instance.ActivateTimeText(isRespawnActive);
+        UIController.Instance.ActiveMenuSelectionPanel(isMenuShown);
     }
 }
