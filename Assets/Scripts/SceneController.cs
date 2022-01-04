@@ -33,6 +33,11 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     public void MainGame()
     {
         SceneManager.LoadScene(1);
@@ -40,7 +45,7 @@ public class SceneController : MonoBehaviour
 
     public void ProblemList()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(2);
     }
 
     public void ExitGame()
